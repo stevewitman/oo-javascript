@@ -1,7 +1,14 @@
 function onReady() {
 	var clock = new com.website.Clock('clock');
-	var clock = new com.website.Clock('clock2', -300, 'ETC');
+	var clock = new com.website.TextClock('clock2', -300, 'ETC');
 	var clock = new com.website.Clock('clock3', 300, 'X');
+
+	LiveDate.call(clock, 1,2,3);
+	LiveDate.apply(clock, [1,2,3]);
+}
+
+function LiveDate(a,b,c) {
+	console.log(this, a, b, c)
 }
 
 Date.__interval = 0;
@@ -60,5 +67,15 @@ com.website.Clock.prototype.formatDigits = function(val) {
 	}
 	return val;
 }
+
+com.website.TextClock = function(id, offset, label) {
+	com.website.Clock.apply(this, arguments)
+}
+com.website.TextClock.prototype = Object.create(com.website.Clock.prototype);
+com.website.TextClock.prototype.constructor = com.website.TextClock;
+
+
+
+
 
 window.onload = onReady;
