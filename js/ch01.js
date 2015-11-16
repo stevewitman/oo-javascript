@@ -71,10 +71,15 @@ com.website.Clock.prototype.formatDigits = function(val) {
 com.website.TextClock = function(id, offset, label) {
 	com.website.Clock.apply(this, arguments)
 }
-com.website.TextClock.prototype = Object.create(com.website.Clock.prototype);
-com.website.TextClock.prototype.constructor = com.website.TextClock;
+com.website.TextClock.prototype = createObject(com.website.Clock.prototype);
+// com.website.TextClock.prototype.constructor = com.website.TextClock;
 
-
+function createObject(proto, cons) {
+	function c() {}
+	c.prototype = proto;
+	c.prototype.constructor = cons;
+	return new c();
+}
 
 
 
