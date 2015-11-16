@@ -58,8 +58,12 @@ com.website.Clock.prototype.version = '1.00';
 com.website.Clock.prototype.updateClock = function() {
 	var date = this.d;
 	var clock = document.getElementById(this.id)
-	clock.innerHTML = this.formatDigits(date.getHours()) + ':' + this.formatDigits(date.getMinutes()) + ':' + this.formatDigits(date.getSeconds()) + ' ' + this.label;
+	clock.innerHTML = this.formatOutput(date.getHours(), date.getMinutes(), date.getSeconds(), this.label);
 };
+
+com.website.Clock.prototype.formatOutput = function(h,m,s,label) {
+	return this.formatDigits(h) + ':' + this.formatDigits(m) + ':' + this.formatDigits(s) + ' ' + label;
+}
 
 com.website.Clock.prototype.formatDigits = function(val) {
 	if (val < 10) {
@@ -70,9 +74,13 @@ com.website.Clock.prototype.formatDigits = function(val) {
 
 com.website.TextClock = function(id, offset, label) {
 	com.website.Clock.apply(this, arguments)
+	console.log(this.version);
 }
 com.website.TextClock.prototype = createObject(com.website.Clock.prototype);
-// com.website.TextClock.prototype.constructor = com.website.TextClock;
+com.website.TextClock.prototype.version = '1.01';
+com.website.TextClock.prototype.formatOutput = function(h,m,s,label) {
+	return this.formatDigits(h) + '-' + this.formatDigits(m) + '-' + this.formatDigits(s) + ' ' + label;
+}
 
 function createObject(proto, cons) {
 	function c() {}
