@@ -1,7 +1,7 @@
 function onReady() {
-	var clock = new Clock('clock');
-	var clock = new Clock('clock2', -300, 'ETC');
-	var clock = new Clock('clock3', 300, 'X');
+	var clock = new com.website.Clock('clock');
+	var clock = new com.website.Clock('clock2', -300, 'ETC');
+	var clock = new com.website.Clock('clock3', 300, 'X');
 }
 
 Date.__interval = 0;
@@ -28,7 +28,10 @@ Date.prototype.autoClock = function(isAuto) {
 	}
 }
 
-function Clock(id, offset, label) {
+var com = com || {};
+com.website = com.website || {};
+
+com.website.Clock = function(id, offset, label) {
 	offset = offset || 0;
 	label = label || '';
 	var d = new Date();
@@ -43,15 +46,15 @@ function Clock(id, offset, label) {
 	this.updateClock();
 }
 
-Clock.prototype.version = '1.00';
+com.website.Clock.prototype.version = '1.00';
 
-Clock.prototype.updateClock = function() {
+com.website.Clock.prototype.updateClock = function() {
 	var date = this.d;
 	var clock = document.getElementById(this.id)
 	clock.innerHTML = this.formatDigits(date.getHours()) + ':' + this.formatDigits(date.getMinutes()) + ':' + this.formatDigits(date.getSeconds()) + ' ' + this.label;
 };
 
-Clock.prototype.formatDigits = function(val) {
+com.website.Clock.prototype.formatDigits = function(val) {
 	if (val < 10) {
 		val =  '0' + val;
 	}
