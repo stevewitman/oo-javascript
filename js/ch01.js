@@ -1,7 +1,7 @@
 function onReady() {
 	var clock = new com.website.Clock('clock');
 	var clock = new com.website.TextClock('clock2', -300, 'ETC');
-	var clock = new com.website.Clock('clock3', 300, 'X');
+	var clock = new com.website.AlarmClock('clock3', 300, 'X', 8, 58);
 
 	LiveDate.call(clock, 1,2,3);
 	LiveDate.apply(clock, [1,2,3]);
@@ -76,11 +76,30 @@ com.website.TextClock = function(id, offset, label) {
 	com.website.Clock.apply(this, arguments)
 	console.log(this.version);
 }
-com.website.TextClock.prototype = createObject(com.website.Clock.prototype);
+com.website.TextClock.prototype = createObject(com.website.Clock.prototype, com.website.TextClock);
 com.website.TextClock.prototype.version = '1.01';
 com.website.TextClock.prototype.formatOutput = function(h,m,s,label) {
 	return this.formatDigits(h) + '-' + this.formatDigits(m) + '-' + this.formatDigits(s) + ' ' + label;
 }
+
+com.website.AlarmClock = function(id, offset, label, almH, almM) {
+	com.website.TextClock.apply(this, arguments)
+	this.almH = almH;
+	this.almM = almM;
+	console.log(this.version);
+}
+com.website.AlarmClock.prototype = createObject(com.website.TextClock.prototype, com.website.AlarmClock);
+com.website.AlarmClock.prototype.formatOutput = function(h,m,s,label) {
+	var output;
+	if (h == this.almH && m == this.almM) {
+		output = 'ALARM - WAKE UP'
+		var snd = new Audio('')
+	}
+	else
+		output = this.formatDigits(h) + '-' + this.formatDigits(m) + '-' + this.formatDigits(s) + ' ' + label;
+	return output;
+}
+
 
 function createObject(proto, cons) {
 	function c() {}
