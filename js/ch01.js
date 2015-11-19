@@ -103,9 +103,17 @@ com.website.AlarmClock = function(id, offset, label) {
 		var a  = this.innerHTML.split(':');
 		that.almH = parseInt(a[0]);
 		that.almM = parseInt(a[1]);
+		if((that.almH>=0 && that.almH<24) && (that.almM>=0 && that.almM<60)) {
+			var event = new Event('restart_tick');
+			this.dispatchEvent(event)
+		}
 		console.log(that.almH,that.almM);
-		that.tick(true);
+
 	});
+	this.dom.addEventListener('restart_tick', function() {
+		that.tick(true);
+	})
+
 }
 com.website.AlarmClock.prototype = createObject(com.website.Clock.prototype, com.website.AlarmClock);
 com.website.AlarmClock.prototype.formatOutput = function(h,m,s,label) {
