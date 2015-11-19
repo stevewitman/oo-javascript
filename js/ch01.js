@@ -21,7 +21,12 @@ Date.addToInterval = function(date) {
 }
 Date.updateDates = function() {
 	for(var i=0; i<this.__aDates.length; i++) {
-		this.__aDates[i].updateSeconds();
+		if (this.__aDates[i] instanceof Date)
+			this.__aDates[i].updateSeconds();
+		else if (this.__aDates[i] instanceof Function)
+			this.__aDates[i]();
+		else if (this.__aDates[i] && this.__aDates[i]['update'])
+			this.__aDates[i].update();
 	}
 }
 
@@ -47,24 +52,32 @@ com.website.Clock = function(id, offset, label) {
 	this.d.autoClock(true);
 	this.id = id;
 	this.label = label;
+
 	this.tick(true);
+	var that = this;
+	Date.addToInterval(function() {
+		that.updateClock();
+	});
 }
 com.website.Clock.prototype.tick = function(isTick) {
-	clearInterval(this.myInternalInterval);
-	if(isTick){
-		var that = this;
-		this.myInternalInterval = setInterval(function() {
-		that.updateClock();}, 1000);
-		this.updateClock();
-	}
+	// clearInterval(this.myInternalInterval);
+	this.isTicking = isTick;
+	// if(isTick){
+	// 	var that = this;
+	// 	this.myInternalInterval = setInterval(function() {
+	// 	that.updateClock();}, 1000);
+	// 	this.updateClock();
+	// }
 	
 }
 com.website.Clock.prototype.version = '1.00';
 
 com.website.Clock.prototype.updateClock = function() {
-	var date = this.d;
-	var clock = document.getElementById(this.id)
-	clock.innerHTML = this.formatOutput(date.getHours(), date.getMinutes(), date.getSeconds(), this.label);
+	if(this.isTicking) {
+		var date = this.d;
+		var clock = document.getElementById(this.id)
+		clock.innerHTML = this.formatOutput(date.getHours(), date.getMinutes(), date.getSeconds(), this.label);
+	}
 };
 
 com.website.Clock.prototype.formatOutput = function(h,m,s,label) {
