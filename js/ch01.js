@@ -88,19 +88,22 @@ com.website.TextClock.prototype.formatOutput = function(h,m,s,label) {
 	return this.formatDigits(h) + '-' + this.formatDigits(m) + '-' + this.formatDigits(s) + ' ' + label;
 }
 
-com.website.AlarmClock = function(id, offset, label, almH, almM) {
+com.website.AlarmClock = function(id, offset, label) {
 	com.website.Clock.apply(this, arguments)
-	this.almH = almH;
-	this.almM = almM;
 	console.log(this.version);
 	this.doUpdate = true;
 	this.dom = document.getElementById(id);
 	this.dom.contentEditable = true;
 	var that = this;
 	this.dom.addEventListener('focus', function(e) {
+		this.innerHTML = this.innerHTML.slice(0, this.innerHTML.lastIndexOf(':'));
 		that.tick(false);
 	});
 	this.dom.addEventListener('blur', function(e) {
+		var a  = this.innerHTML.split(':');
+		that.almH = parseInt(a[0]);
+		that.almM = parseInt(a[1]);
+		console.log(that.almH,that.almM);
 		that.tick(true);
 	});
 }
