@@ -47,12 +47,18 @@ com.website.Clock = function(id, offset, label) {
 	this.d.autoClock(true);
 	this.id = id;
 	this.label = label;
-	var that = this;
-	setInterval(function() {
-		that.updateClock();}, 1000);
-	this.updateClock();
+	this.tick(true);
 }
-
+com.website.Clock.prototype.tick = function(isTick) {
+	clearInterval(this.myInternalInterval);
+	if(isTick){
+		var that = this;
+		this.myInternalInterval = setInterval(function() {
+		that.updateClock();}, 1000);
+		this.updateClock();
+	}
+	
+}
 com.website.Clock.prototype.version = '1.00';
 
 com.website.Clock.prototype.updateClock = function() {
@@ -87,8 +93,16 @@ com.website.AlarmClock = function(id, offset, label, almH, almM) {
 	this.almH = almH;
 	this.almM = almM;
 	console.log(this.version);
+	this.doUpdate = true;
 	this.dom = document.getElementById(id);
 	this.dom.contentEditable = true;
+	var that = this;
+	this.dom.addEventListener('focus', function(e) {
+		that.tick(false);
+	});
+	this.dom.addEventListener('blur', function(e) {
+		that.tick(true);
+	});
 }
 com.website.AlarmClock.prototype = createObject(com.website.Clock.prototype, com.website.AlarmClock);
 com.website.AlarmClock.prototype.formatOutput = function(h,m,s,label) {
@@ -102,14 +116,11 @@ com.website.AlarmClock.prototype.formatOutput = function(h,m,s,label) {
 	return output;
 }
 
-
 function createObject(proto, cons) {
 	function c() {}
 	c.prototype = proto;
 	c.prototype.constructor = cons;
 	return new c();
 }
-
-
 
 window.onload = onReady;
